@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
     }
 	
 	TTF_Init(); //Init the font
-	plInitialize(); //Init needed for shared font
+	plInitialize(PlServiceType_User); //Init needed for shared font
 	nsInitialize(); //Init ns service for game save mounting
 	accountInitialize(AccountServiceType_Application); //Init the account service. Needed for getting the user ID.
 	

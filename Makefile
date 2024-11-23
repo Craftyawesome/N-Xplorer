@@ -62,7 +62,7 @@ ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 #Stolen from https://github.com/devolution2409/NX-input-recorder/blob/master/Makefile#L63 because SDL_Mixer is hard
-LIBS := -lcurl -lz -lmbedtls -lmbedcrypto -lmbedx509 -lnx -lfreetype -lSDL2_mixer -lopusfile -lopus -lmodplug -lmpg123 -lvorbisidec -lc -logg -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lwebp -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lSimpleIniParser -lminizip
+LIBS := -lcurl -lz -lmbedtls -lmbedcrypto -lmbedx509 -lnx -lfreetype -lSDL2_mixer -lopusfile -lopus -lmodplug -lmpg123 -lvorbisidec -lc -logg -lSDL2_ttf -lharfbuzz -lSDL2_gfx -lSDL2_image -lwebp -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lSimpleIniParser -lminizip
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
