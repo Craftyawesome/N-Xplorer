@@ -174,7 +174,7 @@ void ExplorerUI::GetInput()
 							{
 								printf("%s\n", DirPath.c_str());
 								u64 AppID = SaveMountMap[DirPath];
-								char UniqueSaveMount[7];
+								char UniqueSaveMount[17];
 								sprintf(UniqueSaveMount, "Save_%03i", FileNameList->SelectedIndex - 3);
 								DirPath = UniqueSaveMount;
 								printf("%lu\n", AppID);
@@ -384,6 +384,7 @@ std::vector <std::string> ExplorerUI::GetSaveDataMounts()
 	FsSaveDataInfo saveDataInfo;
 	s64 totalSaveEntries = 0;
 	std::vector <std::string> AppMounts;
+	Result res;
 	fsOpenSaveDataInfoReader(&reader, FsSaveDataSpaceId_User);
 	do
 	{
@@ -394,12 +395,16 @@ std::vector <std::string> ExplorerUI::GetSaveDataMounts()
 			NacpLanguageEntry *langentry = nullptr;
 			std::unique_ptr<NsApplicationControlData> buf = std::make_unique<NsApplicationControlData>();
 			memset(buf.get(), 0, sizeof(NsApplicationControlData));
-			nsGetApplicationControlData(NsApplicationControlSource_Storage, saveDataInfo.application_id, buf.get(), sizeof(NsApplicationControlData), nullptr);
-			nacpGetLanguageEntry(&buf->nacp, &langentry);
-			std::string AppName = std::string(langentry->name);
-			//Add the app ID and the name to vectors for use later
-			AppMounts.push_back(AppName);
-			SaveMountMap.insert({AppName, saveDataInfo.application_id});
+			res = nsGetApplicationControlData(NsApplicationControlSource_Storage, saveDataInfo.application_id, buf.get(), sizeof(NsApplicationControlData), nullptr);
+			if (R_SUCCEEDED(res)) {
+				res = nacpGetLanguageEntry(&buf->nacp, &langentry);
+				if (R_SUCCEEDED(res)) {
+					std::string AppName = std::string(langentry->name);
+					//Add the app ID and the name to vectors for use later
+					AppMounts.push_back(AppName);
+					SaveMountMap.insert({AppName, saveDataInfo.application_id});
+				}
+			}
 		}
 	} while(totalSaveEntries > 0);
 	fsSaveDataInfoReaderClose(&reader);
